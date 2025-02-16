@@ -4,19 +4,19 @@ import { ITodoItemsModel } from "./TodoItems.model";
 // Interface for a single todo item
 export interface ITodoItemModel extends IBaseModel {
     id: number;
-    title: string;
+    title: Signal.State<string>;
     completed: Signal.State<boolean>;
     toggleCompletion(): void;
 }
 
 // Todo Model representing a single todo item
 export class TodoItemModel extends BaseModel implements ITodoItemModel {
-    title: string = '';
+    title: Signal.State<string> = new Signal.State('');
     completed: Signal.State<boolean> = new Signal.State(false);
 
     constructor(title: string, completed: boolean = false, parent: ITodoItemsModel) {
         super();
-        this.title = title;
+        this.title = new Signal.State(title);
         this.completed = new Signal.State(completed);
         this.parent = parent;
     }
@@ -27,7 +27,7 @@ export class TodoItemModel extends BaseModel implements ITodoItemModel {
 
     protected toJsonData(): object {
         return {
-            title: this.title,
+            title: this.title.get(),
             completed: this.completed.get()
         };
     }

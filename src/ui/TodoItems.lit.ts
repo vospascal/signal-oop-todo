@@ -17,7 +17,6 @@ export class TodoItems extends ScopedRegistryHost(SignalWatcher(LitElement)) {
 
   render() {
     return html`
-      <h2>Todo Items</h2>
       <ul>
         ${this.renderItems(this.todos)}
       </ul>
@@ -34,7 +33,12 @@ export class TodoItems extends ScopedRegistryHost(SignalWatcher(LitElement)) {
     `)
   }
 
-  static styles = css``
+  static styles = css`
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+  `
 }
 
 declare global {

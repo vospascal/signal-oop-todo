@@ -26,6 +26,7 @@ export enum TodoFilter {
 export class TodoItemsModel extends BaseModel implements ITodoItemsModel {
     items: SignalSet<ITodoItemModel>;
     filter: Signal.State<TodoFilter> = new Signal.State(TodoFilter.All);
+    activeFilter: Signal.State<TodoFilter> = new Signal.State(TodoFilter.All);
 
     constructor(items: ITodoItemModel[]) {
         super()
@@ -63,7 +64,7 @@ export class TodoItemsModel extends BaseModel implements ITodoItemsModel {
     }
 
     filtered(): ITodoItemModel[] {
-        switch (this.filter.get()) {
+        switch (this.activeFilter.get()) {
             case TodoFilter.Active:
                 return this.active;
             case TodoFilter.Completed:
@@ -78,7 +79,7 @@ export class TodoItemsModel extends BaseModel implements ITodoItemsModel {
     }
 
     setFilter(filter: TodoFilter): void {
-        this.filter.set(filter);
+        this.activeFilter.set(filter);
     }
 
     protected toJsonData(): object {

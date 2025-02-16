@@ -6,10 +6,21 @@
     <title>Vite + Lit + TS</title>
     <link rel="stylesheet" href="./src/index.css" />
     <script type="module" src="/src/my-todos.ts"></script>
+    <script>
+      function logMyTodosModel() {
+        const myTodosElements = document.querySelectorAll('my-todos'); 
+        const myTodosModels = Array.from(myTodosElements).map(element => element.todos);
+        const myTodosString = JSON.stringify(myTodosModels);
+        console.log(myTodosString);
+        console.log('--------------------------------');
+      }
+    </script>
   </head>
   <body>
-    <my-todos>
-      <h1>Vite + Lit</h1>
-    </my-todos>
+    <my-todos></my-todos>
+    <hr>
+    <my-todos></my-todos>
+    <hr>
+    <button onclick="logMyTodosModel()">log todos model to console</button>
   </body>
 </html>
