@@ -7,12 +7,13 @@
     <link rel="stylesheet" href="./src/index.css" />
     <script type="module" src="/src/my-todos.ts"></script>
     <script>
-      function logMyTodosModel() {
+       function logMyTodosModel() {
         const myTodosElements = document.querySelectorAll('my-todos'); 
-        const myTodosModels = Array.from(myTodosElements).map(element => element.todos);
-        const myTodosString = JSON.stringify(myTodosModels);
-        console.log(myTodosString);
-        console.log('--------------------------------');
+        myTodosElements.forEach(element => {
+          const myTodosString = JSON.stringify(element.todos);
+          console.log(myTodosString);
+          console.log('--------------------------------');
+        });
       }
     </script>
   </head>
