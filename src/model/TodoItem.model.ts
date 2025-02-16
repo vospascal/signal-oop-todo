@@ -11,13 +11,11 @@ export interface ITodoItemModel extends IBaseModel {
 
 // Todo Model representing a single todo item
 export class TodoItemModel extends BaseModel implements ITodoItemModel {
-    id: number = 0;
     title: string = '';
     completed: Signal.State<boolean> = new Signal.State(false);
 
-    constructor(id: number, title: string, completed: boolean = false, parent: ITodoItemsModel) {
+    constructor(title: string, completed: boolean = false, parent: ITodoItemsModel) {
         super();
-        this.id = id;
         this.title = title;
         this.completed = new Signal.State(completed);
         this.parent = parent;
@@ -29,7 +27,6 @@ export class TodoItemModel extends BaseModel implements ITodoItemModel {
 
     protected toJsonData(): object {
         return {
-            id: this.id,
             title: this.title,
             completed: this.completed.get()
         };
@@ -37,6 +34,6 @@ export class TodoItemModel extends BaseModel implements ITodoItemModel {
 
     static parse(item: any, parent: ITodoItemsModel): TodoItemModel {
         console.log('parse', item, parent);
-        return new TodoItemModel(item.id, item.title, item.completed, parent);
+        return new TodoItemModel(item.title, item.completed, parent);
     }
 }

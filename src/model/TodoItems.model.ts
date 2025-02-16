@@ -2,6 +2,7 @@ import { IBaseModel, BaseModel } from "./BaseModel";
 import { ITodoItemModel, TodoItemModel } from "./TodoItem.model";
 import { SignalArray } from 'signal-utils/array';
 import { Signal } from "signal-polyfill";
+import { SignalSet } from 'signal-utils/set';
 
 // Interface for a collection of todos
 export interface ITodoItemsModel extends IBaseModel {
@@ -23,41 +24,42 @@ export enum TodoFilter {
 
 // Todo List representing a collection of todos
 export class TodoItemsModel extends BaseModel implements ITodoItemsModel {
-    items: SignalArray<ITodoItemModel>;
+    items: SignalSet<ITodoItemModel>;
     filter: Signal.State<TodoFilter> = new Signal.State(TodoFilter.All);
 
     constructor(items: ITodoItemModel[]) {
         super()
-        this.items = SignalArray.from(items)
+        this.items = new SignalSet(items);
     }
 
     addTodo(todo: ITodoItemModel): void {
         todo.parent = this;
-        this.items.push(todo);
+        this.items.add(todo);
     }
 
     removeCompletedTodos(): void {
-        this.items = this.items.filter(todo => !todo.completed.get());
+        const completedTodos = Array.from(this.items).filter(todo => todo.completed.get());
+        completedTodos.forEach(todo => this.items.delete(todo));
     }
 
     getTodos(): ITodoItemModel[] {
-        return this.items;
+        return Array.from(this.items);
     }
 
     get all(): ITodoItemModel[] {
-        return this.items;
+        return Array.from(this.items);
     }
 
     get active(): ITodoItemModel[] {
-        return this.items.filter((todo) => !todo.completed.get());
+        return Array.from(this.items).filter((todo) => todo.completed.get() === false);
     }
 
     get completed(): ITodoItemModel[] {
-        return this.items.filter((todo) => todo.completed.get());
+        return Array.from(this.items).filter((todo) => todo.completed.get() === true);
     }
 
     get allCompleted(): boolean {
-        return this.items.every((todo) => todo.completed.get());
+        return Array.from(this.items).every((todo) => todo.completed.get());
     }
 
     filtered(): ITodoItemModel[] {
@@ -72,8 +74,7 @@ export class TodoItemsModel extends BaseModel implements ITodoItemsModel {
     }
 
     removeTodo(todo: ITodoItemModel): void {
-        debugger;
-        this.items.splice(this.items.indexOf(todo), 1);
+        this.items.delete(todo);
     }
 
     setFilter(filter: TodoFilter): void {
@@ -82,12 +83,12 @@ export class TodoItemsModel extends BaseModel implements ITodoItemsModel {
 
     protected toJsonData(): object {
         return {
-            todos: this.items.map(todo => todo.toJSON())
+            todos: Array.from(this.items).map(todo => todo.toJSON())
         };
     }
 
     static parse(items: any, parent: ITodoItemsModel) {
-        const todos = items.map((todo: any) => new TodoItemModel(todo.id, todo.title, todo.completed, parent));
+        const todos = items.map((todo: any) => new TodoItemModel(todo.title, todo.completed, parent));
         return new TodoItemsModel(todos);
     }
 }

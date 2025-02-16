@@ -11,18 +11,12 @@ export class TodoItem extends ScopedRegistryHost(SignalWatcher(LitElement)) {
 
   private _internals = this.attachInternals();
 
-  connectedCallback() {
-    super.connectedCallback();
-    this.updateCompletionState();
-  }
-
   handleToggleCompletion() {
     this.todo.toggleCompletion();
     this.updateCompletionState();
   }
 
   handleRemove() {
-    console.log('handleRemove', this.todo.parent);
     this.todo.parent?.removeTodo(this.todo);
   }
 
@@ -35,6 +29,8 @@ export class TodoItem extends ScopedRegistryHost(SignalWatcher(LitElement)) {
   }
 
   render() {
+    this.updateCompletionState();
+
     return html`
       ${this.renderItem(this.todo)}
       <button @click=${this.handleToggleCompletion}>Toggle</button>
@@ -46,7 +42,7 @@ export class TodoItem extends ScopedRegistryHost(SignalWatcher(LitElement)) {
   renderItem(todo: ITodoItemModel) {
     if (!todo) return nothing;
     return html`
-      ${todo.id} - ${todo.title} - ${todo.completed.get() ? 'true' : 'false'} 
+      ${todo.title} - ${todo.completed.get() ? 'true' : 'false'} 
     `;
   }
 

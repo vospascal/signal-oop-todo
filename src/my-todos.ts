@@ -7,6 +7,12 @@ import { TodoItems } from "./ui/TodoItems.lit";
 import { SignalWatcher } from './signal-watcher';
 import { TodoItemModel } from './model/TodoItem.model';
 
+
+
+export interface IMyTodos extends ITodoItemsModel {
+  todos: ITodoItemsModel;
+}
+
 @customElement('my-todos')
 export class MyTodos extends ScopedRegistryHost(SignalWatcher(LitElement)) {
   static elementDefinitions = {
@@ -18,15 +24,25 @@ export class MyTodos extends ScopedRegistryHost(SignalWatcher(LitElement)) {
   constructor() {
     super()
     this.todos = TodoItemsModel.parse([
-      { id: 1, title: 'create a todo', completed: false },
-      { id: 2, title: 'create a list of todos', completed: true }
-    ], this.todos);
+      { title: 'create a todo', completed: false },
+      { title: 'create a list of todos', completed: true },
+      { title: 'get milk', completed: false },
+      { title: 'get bread', completed: false },
+      { title: 'get eggs', completed: false },
+      { title: 'walk the dog', completed: false }
+    ], this as any);
   }
 
   addTodo(event: Event) {
+    if (event.target && (event.target as HTMLInputElement).value.trim() === '') {
+      return;
+    }
+    if (event.type === 'keyup' && (event as KeyboardEvent).key !== 'Enter') {
+      return;
+    }
     const input = event.target as HTMLInputElement;
     const title = input.value;
-    const todo = TodoItemModel.parse({ id: this.todos.items.length + 1, title, completed: false }, this.todos);
+    const todo = TodoItemModel.parse({ title, completed: false }, this.todos);
     this.todos.addTodo(todo);
     input.value = '';
   }
@@ -38,7 +54,7 @@ export class MyTodos extends ScopedRegistryHost(SignalWatcher(LitElement)) {
   render() {
     return html`
       <h1>Todo Lit</h1>
-      <input type="text" placeholder="add a todo" @blur=${this.addTodo} />
+      <input type="text" placeholder="add a todo" @blur=${this.addTodo} @keyup=${this.addTodo} />
       <todo-items .todos=${this.todos}></todo-items>
       <div>
         <button @click=${() => this.setFilter(TodoFilter.All)}>All</button>
