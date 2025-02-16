@@ -1,40 +1,29 @@
-import { IBaseModel, BaseModel } from "./BaseModel";
 import { Signal } from "signal-polyfill";
+import { IBaseModel, BaseModel } from "./BaseModel";
+import { ITodoItemsModel } from "./TodoItems.model";
 // Interface for a single todo item
 export interface ITodoItemModel extends IBaseModel {
     id: number;
     title: string;
-    completed: boolean;
+    completed: Signal.State<boolean>;
     toggleCompletion(): void;
 }
 
 // Todo Model representing a single todo item
 export class TodoItemModel extends BaseModel implements ITodoItemModel {
-    id: Signal.State<number> = new Signal.State(0);
-    title: Signal.State<string> = new Signal.State('');
-    completed: Signal.State<boolean> = new Signal.State(false); // Use Signal for reactivity
+    id: number = 0;
+    title: string = '';
+    completed: Signal.State<boolean> = new Signal.State(false);
 
-    get id(): number {
-        return this.id.get();
-    }
-
-    get title(): string {
-        return this.title.get();
-    }
-
-    get completed(): boolean {
-        return this.completed.get();
-    }
-
-    constructor(id: number, title: string, completed: boolean = false) {
+    constructor(id: number, title: string, completed: boolean = false, parent: ITodoItemsModel) {
         super();
-        this.id.set(id);
-        this.title.set(title);
-        this.completed.set(completed);
+        this.id = id;
+        this.title = title;
+        this.completed = new Signal.State(completed);
+        this.parent = parent;
     }
 
     toggleCompletion(): void {
-        debugger;
         this.completed.set(!this.completed.get());
     }
 
@@ -44,5 +33,10 @@ export class TodoItemModel extends BaseModel implements ITodoItemModel {
             title: this.title,
             completed: this.completed.get()
         };
+    }
+
+    static parse(item: any, parent: ITodoItemsModel): TodoItemModel {
+        console.log('parse', item, parent);
+        return new TodoItemModel(item.id, item.title, item.completed, parent);
     }
 }

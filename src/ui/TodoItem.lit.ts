@@ -9,11 +9,36 @@ export class TodoItem extends ScopedRegistryHost(SignalWatcher(LitElement)) {
 
   @property({ type: Object }) todo!: ITodoItemModel;
 
+  private _internals = this.attachInternals();
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.updateCompletionState();
+  }
+
+  handleToggleCompletion() {
+    this.todo.toggleCompletion();
+    this.updateCompletionState();
+  }
+
+  handleRemove() {
+    console.log('handleRemove', this.todo.parent);
+    this.todo.parent?.removeTodo(this.todo);
+  }
+
+  updateCompletionState() {
+    if (this.todo.completed.get()) {
+      this._internals.states.add("completed");
+    } else {
+      this._internals.states.delete("completed");
+    }
+  }
+
   render() {
     return html`
-      <h3>todo item</h3>
       ${this.renderItem(this.todo)}
-      <button @click=${() => this.todo.toggleCompletion()}>Toggle</button>
+      <button @click=${this.handleToggleCompletion}>Toggle</button>
+      <button @click=${this.handleRemove}>Remove</button>
     `
   }
 
@@ -21,11 +46,20 @@ export class TodoItem extends ScopedRegistryHost(SignalWatcher(LitElement)) {
   renderItem(todo: ITodoItemModel) {
     if (!todo) return nothing;
     return html`
-      ${todo.id} - ${todo.title} - ${todo.completed ? 'true' : 'false'} 
+      ${todo.id} - ${todo.title} - ${todo.completed.get() ? 'true' : 'false'} 
     `;
   }
 
-  static styles = css``
+  static styles = css`
+    :host(:state(completed)) {
+      text-decoration: line-through;
+      color: gray;
+    }
+    :host(:not(:state(completed))) {
+      text-decoration: none;
+      color: black;
+    }
+  `;
 }
 
 declare global {
