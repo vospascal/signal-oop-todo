@@ -4,6 +4,8 @@ import { SignalArray } from 'signal-utils/array';
 import { Signal } from "signal-polyfill";
 import { SignalSet } from 'signal-utils/set';
 
+import {SynapseNode} from "../SynapseNode"
+
 // Interface for a collection of todos
 export interface ITodoItemsModel extends IBaseModel {
     items: ITodoItemModel[]
@@ -23,6 +25,7 @@ export enum TodoFilter {
 }
 
 // Todo List representing a collection of todos
+@SynapseNode
 export class TodoItemsModel extends BaseModel implements ITodoItemsModel {
     items: SignalSet<ITodoItemModel>;
     filter: Signal.State<TodoFilter> = new Signal.State(TodoFilter.All);

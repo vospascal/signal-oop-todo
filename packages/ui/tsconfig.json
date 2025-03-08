@@ -21,5 +21,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src"]
+  "include": ["src", "packages/ui/src/TodoItem.lit.tspackages/ui/src/TodoItems.lit.tst.ts", "packages/ui/src/my-todos.ts", "packages/synapse/SynapseNode.ts", "packages/ui/src/watcher/signal-watcher.ts", "packages/ui/src/watcher/watch.ts", "packages/ui/src/watcher/vite-env.d.ts"]
 }

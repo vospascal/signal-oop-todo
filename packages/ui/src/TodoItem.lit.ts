@@ -1,9 +1,11 @@
 import { ScopedRegistryHost } from "@lit-labs/scoped-registry-mixin";
 import { LitElement, html, css, nothing } from "lit";
 import { property } from "lit/decorators.js";
-import { ITodoItemModel } from "../model/TodoItem.model";
-import { SignalWatcher } from "../signal-watcher";
+import { ITodoItemModel } from "../../model/src/TodoItem.model";
+import { SignalWatcher } from "./watcher/signal-watcher";
+import {SynapseNode} from "../../synapse/src/SynapseNode"
 
+@SynapseNode
 export class TodoItem extends ScopedRegistryHost(SignalWatcher(LitElement)) {
   static elementDefinitions = {};
 

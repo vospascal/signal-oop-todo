@@ -3,8 +3,8 @@ import { ScopedRegistryHost } from "@lit-labs/scoped-registry-mixin";
 import { LitElement, html, css } from "lit";
 import { customElement } from "lit/decorators.js";
 import { type ITodoItemsModel, TodoFilter, TodoItemsModel } from "./model/TodoItems.model";
-import { TodoItems } from "./ui/TodoItems.lit";
-import { SignalWatcher } from './signal-watcher';
+import { TodoItems } from "./TodoItems.lit";
+import { SignalWatcher } from './watcher/signal-watcher';
 import { TodoItemModel } from './model/TodoItem.model';
 
 
