@@ -27,7 +27,7 @@ export class MyTodos extends ScopedRegistryHost(SignalWatcher(LitElement)) {
       { title: 'create a todo', completed: false },
       { title: 'create a list of todos', completed: true },
       { title: 'get milk', completed: false },
-      { title: 'get bread', completed: false },
+      { title: 'get bread', completed: true },
       { title: 'get eggs', completed: false },
       { title: 'walk the dog', completed: false }
     ], this as any);
