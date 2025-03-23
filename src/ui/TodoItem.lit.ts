@@ -1,14 +1,22 @@
 import { ScopedRegistryHost } from "@lit-labs/scoped-registry-mixin";
-import { LitElement, html, css, nothing } from "lit";
+import { LitElement, html, css, nothing, PropertyValues } from "lit";
 import { property } from "lit/decorators.js";
 import { ITodoItemModel } from "../model/TodoItem.model";
 import { SignalWatcher } from "../signal-watcher";
+import { PluginOverridableMixinDynamic } from "./PluginOverridableMixinDynamic"
 
-export class TodoItem extends ScopedRegistryHost(SignalWatcher(LitElement)) {
+export class TodoItem extends PluginOverridableMixinDynamic(SignalWatcher(LitElement)) {
+
+// dynamic plugin fetching and ScopedRegistryHost dont realy work ..  
+// export class TodoItem extends PluginOverridableMixinDynamic(ScopedRegistryHost(SignalWatcher(LitElement))) {
   static elementDefinitions = {};
 
   @property({ type: Object }) todo!: ITodoItemModel;
   @property({ type: Boolean }) isEditingTitle = false;
+  @property({ type: String }) pluginPath = '';
+
+  // should be based on 
+  // pluginPath: string = 'renderpluginhere';
 
   private _internals = this.attachInternals();
 
@@ -37,7 +45,7 @@ export class TodoItem extends ScopedRegistryHost(SignalWatcher(LitElement)) {
     }
   }
 
-  render() {
+  renderDefault() {
     this.updateCompletionState();
     this.updateEditingState();
     return html`

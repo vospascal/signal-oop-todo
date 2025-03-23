@@ -26,9 +26,9 @@ export class TodoItems extends ScopedRegistryHost(SignalWatcher(LitElement)) {
   renderItems(todos: ITodoItemsModel) {
     if (!todos.items) return nothing
     const filteredItems = todos.filtered();
-    return filteredItems.map((item: ITodoItemModel) => html`
+    return filteredItems.map((item: ITodoItemModel, index: number) => html`
         <li>
-          <todo-item .todo=${item}></todo-item>
+          <todo-item .todo=${item} pluginPath=${index}></todo-item>
         </li>
     `)
   }
