@@ -1,12 +1,11 @@
 import { IBaseModel, BaseModel } from "./BaseModel";
 import { ITodoItemModel, TodoItemModel } from "./TodoItem.model";
-import { SignalArray } from 'signal-utils/array';
 import { Signal } from "signal-polyfill";
 import { SignalSet } from 'signal-utils/set';
 
 // Interface for a collection of todos
 export interface ITodoItemsModel extends IBaseModel {
-    items: ITodoItemModel[]
+    items: SignalSet<ITodoItemModel>;
     addTodo(todo: ITodoItemModel): void;
     removeCompletedTodos(): void;
     getTodos(): ITodoItemModel[];

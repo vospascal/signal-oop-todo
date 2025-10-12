@@ -4,7 +4,7 @@ import { ITodoItemModel } from "../model/TodoItem.model";
 import { property } from "lit/decorators.js";
 import { TodoItem } from "./TodoItem.lit";
 import { ITodoItemsModel } from "../model/TodoItems.model";
-import { SignalWatcher } from "../signal-watcher";
+import { SignalWatcher } from "@lit-labs/signals";
 
 
 export class TodoItems extends ScopedRegistryHost(SignalWatcher(LitElement)) {

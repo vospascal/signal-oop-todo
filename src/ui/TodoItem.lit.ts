@@ -2,7 +2,7 @@ import { ScopedRegistryHost } from "@lit-labs/scoped-registry-mixin";
 import { LitElement, html, css, nothing } from "lit";
 import { property } from "lit/decorators.js";
 import { ITodoItemModel } from "../model/TodoItem.model";
-import { SignalWatcher } from "../signal-watcher";
+import { SignalWatcher } from "@lit-labs/signals";
 
 export class TodoItem extends ScopedRegistryHost(SignalWatcher(LitElement)) {
   static elementDefinitions = {};

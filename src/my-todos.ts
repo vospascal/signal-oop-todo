@@ -4,13 +4,14 @@ import { LitElement, html, css } from "lit";
 import { customElement } from "lit/decorators.js";
 import { type ITodoItemsModel, TodoFilter, TodoItemsModel } from "./model/TodoItems.model";
 import { TodoItems } from "./ui/TodoItems.lit";
-import { SignalWatcher } from './signal-watcher';
 import { TodoItemModel } from './model/TodoItem.model';
+import { SignalWatcher } from '@lit-labs/signals';
+import { SignalSet } from 'signal-utils/set';
 
 
 
 export interface IMyTodos extends ITodoItemsModel {
-  todos: ITodoItemsModel;
+  todos: SignalSet<ITodoItemsModel>;
 }
 
 @customElement('my-todos')
